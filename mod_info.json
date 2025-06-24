@@ -1,0 +1,33 @@
+{
+  "id": "gentlecode_ungp_shipmasteryinherit", # For the convenience of troubleshooters, include your name and the mod name, not just an acronym.
+  "name": "UNGP Ship Mastery Inherit", # Displayed to the player
+  "author": "GentleCode",
+  "utility": false,
+  "version": { "major": '1', "minor": '0', "patch": '0' },
+  "description": "To inherit ship mastery data through ungp mod from last save.",
+  "gameVersion": "0.97a-RC11",
+  "jars": [ "jars/UNGP Ship Mastery Inherit.jar" ],
+  "modPlugin": "gentlecode.ungpsmi.UNGPShipMasterInheritPlugin",
+  "dependencies": [
+    {
+        "id": "lw_lazylib",
+        "name": "LazyLib", # Optional (recommended)
+        #"version": "2.7b" # Optional
+    },
+    {
+        "id": "MagicLib",
+        "name": "MagicLib",
+        #"version": "0.34"
+    },
+    {
+        "id": "ungp",
+        "name": "Unofficial New Game Plus",
+        "version": "2.3.0"
+    },
+    {
+       "id": "shipmasterysystem",
+       "name": "Ship Mastery System",
+       "version": "0.12.3"
+    }
+  ],
+}
