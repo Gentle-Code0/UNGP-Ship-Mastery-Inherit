@@ -7,7 +7,6 @@
   "description": "To inherit ship mastery data through ungp mod from last save.",
   "gameVersion": "0.97a-RC11",
   "jars": [ "jars/UNGP Ship Mastery Inherit.jar" ],
-  "modPlugin": "gentlecode.ungpsmi.UNGPShipMasteryInherit",
   "dependencies": [
     {
         "id": "lw_lazylib",

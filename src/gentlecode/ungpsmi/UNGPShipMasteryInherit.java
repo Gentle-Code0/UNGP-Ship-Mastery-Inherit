@@ -1,16 +1,12 @@
 package gentlecode.ungpsmi;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.SettingsAPI;
-import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
 import java.util.*;
 
-import com.thoughtworks.xstream.mapper.Mapper;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import shipmastery.data.SaveData;
@@ -32,6 +28,10 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
     {
         if(this.isShipMasteryExist)
         {
+            if(SAVE_DATA_TABLE == null)
+            {
+                SAVE_DATA_TABLE = new ShipMastery.SaveDataTable();
+            }
             for (ShipHullSpecAPI shipSpec : Global.getSettings().getAllShipHullSpecs())
             {
                 int masteryLevelData = ShipMastery.getPlayerMasteryLevel(shipSpec);
@@ -53,13 +53,13 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
 
     public void loadDataFromSavepointSlot(JSONObject jsonObject) throws JSONException
     {
-        Iterator<String> keys = jsonObject.keys();
+        Iterator<?> keys = jsonObject.keys();
         while(keys.hasNext())
         {
-            String key = keys.next();
+            String key = (String) keys.next();
             JSONObject saveDataJson = jsonObject.getJSONObject(key);
-            float loadedPoints = (float)jsonObject.getDouble(key);
-            int loadedLevel = jsonObject.getInt(key);
+            float loadedPoints = (float)saveDataJson.getDouble(key);
+            int loadedLevel = saveDataJson.getInt(key);
 
             // Restore data into Save Data Table
             setSaveDataTable(key, loadedLevel, loadedPoints);
@@ -85,18 +85,31 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
     {
         if(isShipMasteryExist && SAVE_DATA_TABLE != null)
         {
-            for(ShipHullSpecAPI shipSpec : Global.getSettings().getAllShipHullSpecs())
+            for(String hullId : SAVE_DATA_TABLE.keySet())
             {
-                SaveData saveData =SAVE_DATA_TABLE.get(shipSpec.getHullId());
+                ShipHullSpecAPI spec = Global.getSettings().getHullSpec(hullId);
+                SaveData saveData =SAVE_DATA_TABLE.get(hullId);
                 if(saveData != null)
                 {
-                    ShipMastery.setPlayerMasteryPoints(shipSpec, saveData.points);
+                    ShipMastery.setPlayerMasteryPoints(spec, saveData.points);
                     for(int i = 0; i < saveData.level; i ++)
                     {
-                        ShipMastery.advancePlayerMasteryLevel(shipSpec);
+                        ShipMastery.advancePlayerMasteryLevel(spec);
                     }
                 }
             }
+//            for(ShipHullSpecAPI shipSpec : Global.getSettings().getAllShipHullSpecs())
+//            {
+//                SaveData saveData =SAVE_DATA_TABLE.get(shipSpec.getHullId());
+//                if(saveData != null)
+//                {
+//                    ShipMastery.setPlayerMasteryPoints(shipSpec, saveData.points);
+//                    for(int i = 0; i < saveData.level; i ++)
+//                    {
+//                        ShipMastery.advancePlayerMasteryLevel(shipSpec);
+//                    }
+//                }
+//            }
         }
 
         LOGGER.info("UNGP Ship Mastery Inherit inheriting data completed.");
