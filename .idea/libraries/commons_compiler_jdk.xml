@@ -1,8 +1,8 @@
 <component name="libraryTable">
-  <library name="starfarer.api">
+  <library name="commons-compiler-jdk">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../starsector-core/commons-compiler.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../starsector-core/commons-compiler-jdk.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../starsector-core/commons-compiler.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../starsector-core/fs.common_obf.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../starsector-core/fs.sound_obf.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../starsector-core/janino.jar!/" />
@@ -17,9 +17,7 @@
       <root url="jar://$PROJECT_DIR$/../../starsector-core/starfarer_obf.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../starsector-core/xstream-1.4.10.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="https://starsectorcommunityapidocs.github.io/CommunityApiDocs/" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../../starsector-core/starfarer.api.zip!/" />
     </SOURCES>
