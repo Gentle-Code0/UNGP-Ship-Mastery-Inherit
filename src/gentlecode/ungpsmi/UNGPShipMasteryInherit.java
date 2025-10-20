@@ -113,21 +113,56 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
     @Override
     public void startInheritDataFromSaver(TooltipMakerAPI root, Map<String, Object> params)
     {
-        if(isShipMasteryExist && saveDataHashMap != null)
+//        if(isShipMasteryExist && saveDataHashMap != null)
+//        {
+//            for(String hullId : saveDataHashMap.keySet())
+//            {
+//                ShipHullSpecAPI spec = Global.getSettings().getHullSpec(hullId);
+//                SaveData saveData = saveDataHashMap.get(hullId);
+//                if(saveData != null)
+//                {
+//                    ShipMastery.setPlayerMasteryPoints(spec, saveData.points);
+//                    for(int i = 0; i < saveData.level; i ++)
+//                    {
+//                        ShipMastery.advancePlayerMasteryLevel(spec);
+//                    }
+//                }
+//            }
+//        }
+        if (!isShipMasteryExist || saveDataHashMap == null)
+            return;
+
+        for (Map.Entry<String, SaveData> e : saveDataHashMap.entrySet())
         {
-            for(String hullId : saveDataHashMap.keySet())
+            String hullId = e.getKey();
+            SaveData saveData = e.getValue();
+            if (saveData == null) continue;
+
+            /* 先检查 hullId 是否还存在于当前游戏 */
+            boolean isFound = false;
+            for(ShipHullSpecAPI spec : Global.getSettings().getAllShipHullSpecs())
             {
-                ShipHullSpecAPI spec = Global.getSettings().getHullSpec(hullId);
-                SaveData saveData = saveDataHashMap.get(hullId);
-                if(saveData != null)
+                if(hullId.equals(spec.getHullId()))
                 {
-                    ShipMastery.setPlayerMasteryPoints(spec, saveData.points);
-                    for(int i = 0; i < saveData.level; i ++)
-                    {
-                        ShipMastery.advancePlayerMasteryLevel(spec);
-                    }
+                    isFound = true;
+                    break;
                 }
             }
+
+            if(!isFound)
+            {
+                LOGGER.warn("UNGP Ship Mastery Inherit Mod: hull spec [" + hullId + "] not found, skipped.");
+                continue;
+            }
+
+            ShipHullSpecAPI spec = Global.getSettings().getHullSpec(hullId);
+            if (spec == null)        // 保险起见，再判一次
+                continue;
+
+            /* 正常恢复数据 */
+            ShipMastery.setPlayerMasteryPoints(spec, saveData.points);
+            for (int i = 0; i < saveData.level; i++)
+                ShipMastery.advancePlayerMasteryLevel(spec);
         }
 
         LOGGER.info("UNGP Ship Mastery Inherit inheriting data completed.");
