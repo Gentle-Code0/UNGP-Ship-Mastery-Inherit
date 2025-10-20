@@ -160,7 +160,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
                 continue;
 
             /* 正常恢复数据 */
-            ShipMastery.setPlayerMasteryPoints(spec, saveData.points);
+            ShipMastery.addPlayerMasteryPoints(spec, saveData.points, false, false, ShipMastery.MasteryGainSource.OTHER);
             for (int i = 0; i < saveData.level; i++)
                 ShipMastery.advancePlayerMasteryLevel(spec);
         }

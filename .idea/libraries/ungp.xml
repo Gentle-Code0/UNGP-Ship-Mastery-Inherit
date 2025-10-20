@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="ungp">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../UnofficialNewGamePlus/jars/ungp.jar!/" />
+      <root url="jar://G:/Games/Starsector 0.98/mods/UnofficialNewGamePlus/jars/ungp.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
