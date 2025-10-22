@@ -1,0 +1,8 @@
+{
+
+  "UNGP_ShipMasteryInherit":{
+    "mod_indication": "Ship Mastery Inherit:",
+    "addSaverInfo_01":"A total of %s ships' mastery level and points have been inherited.",
+  }
+
+}
