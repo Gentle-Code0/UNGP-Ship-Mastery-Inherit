@@ -7,4 +7,5 @@ import java.util.Map;
 public class SMISaveData {
     public shipmastery.data.SaveData pointAndLevelData;
     public Map<Integer, Map<String, List<String>>> masteryEffectData = new HashMap<>();
+    public Map<Integer, String> activatedOptions = new HashMap<>();
 }

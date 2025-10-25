@@ -1,0 +1,4 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+ungpsmi_generalHeader,General Header,Header,通用,,,,,
+ungpsmi_InheritLevelEffects,在重生时继承船舰精通系统每一级的效果,Boolean,true,,设置为 [TRUE] 可在重生时消除船舰精通系统在新存档生成时的随机性，保留玩家在旧档刷新所得的等级效果。,,,
+ungpsmi_InheritActivatedOption,在重生时继承船舰精通系统每一级启用的效果选项,Boolean,false,,设置为 [TRUE] 意味着在新档，一些选择后就无法切换的等级效果无法重新进行选择。当上面那一项设置为 [FALSE] 时，无论当前项设置为何都不会起作用。,,,

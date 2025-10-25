@@ -1,0 +1,4 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+ungpsmi_generalHeader,General Header,Header,General,,,,,
+ungpsmi_InheritLevelEffects,Effects of each level of the Ship Mastery System will be inherited,Boolean,true,,Set to [TRUE] in order to inherit the effects of each level of each ship hull type when start a new save using UNGP, completely eliminating SMS's randomness.,,,
+ungpsmi_InheritActivatedOption,Reactive previously activated level options,Boolean,false,,Set to [TRUE] to reactive previously activated level options when start a new save using UNGP, which means, certain level options that cannot be switched after selection cannot be reselected in your new save. When upper option is set to [FALSE] , no matter what this option is set to, will not going to work.,,,
