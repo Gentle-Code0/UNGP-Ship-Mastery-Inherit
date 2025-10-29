@@ -1,0 +1,5 @@
+# If LunaLib is enabled, LunaLib settings will override the settings here
+{
+"inheritLevelEffects":true,
+"inheritActivatedOption":false
+}

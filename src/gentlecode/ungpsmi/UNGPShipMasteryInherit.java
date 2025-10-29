@@ -33,9 +33,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
     private int inheritCount = 0;   //For counting numbers, but not used due to not so useful. Keep it for now
 
     /** A place to save data get from ShipMastery */
-    private static final Map<String, SMISaveData> SMI_SAVE_DATA_MAP = new HashMap<>();
-
-    private final Map<String, SMISaveData> tempSnapshot = new HashMap<>();
+    private final Map<String, SMISaveData> SMI_SAVE_DATA_MAP = new HashMap<>();
 
     private static final Logger LOGGER = Global.getLogger(UNGP_RulesManager.class);
 
@@ -47,16 +45,6 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
         if(!dataSaver.isShipMasteryExist)
         {
             return dataSaver;
-        }
-
-//        if (!SMI_SAVE_DATA_MAP.isEmpty()) return this;
-//
-//        SMI_SAVE_DATA_MAP.clear();
-
-        if (!tempSnapshot.isEmpty()) {
-            SMI_SAVE_DATA_MAP.putAll(tempSnapshot);
-            tempSnapshot.clear();
-            LOGGER.info("UNGP-SMI: temp snapshot merged into static map.");
         }
 
 //            if(saveDataHashMap == null)
@@ -76,7 +64,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
                 LOGGER.info("UNGP-SMI: found one valid ship, " + hullId + "'s points: " + masteryPointData + ". level: " + masteryLevelData);
 
 
-                SMISaveData smiSaveData = SMI_SAVE_DATA_MAP.computeIfAbsent(hullId, k -> new SMISaveData());
+                SMISaveData smiSaveData = dataSaver.SMI_SAVE_DATA_MAP.computeIfAbsent(hullId, k -> new SMISaveData());
                 LOGGER.info("UNGP-SMI: SNAPSHOT PUT: " + hullId + "'s points: " + masteryPointData + ". level: " + masteryLevelData + " map.size=" + SMI_SAVE_DATA_MAP.size());
 
                 //For points and level saving
@@ -84,7 +72,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
 
                 //For level effect, level option, level strength saving
                 int max = ShipMastery.getMaxMasteryLevel(shipSpec);
-                LOGGER.info("UNGP-SMI: ship " + hullId + "'s max level is: " + max);
+                //LOGGER.info("UNGP-SMI: ship " + hullId + "'s max level is: " + max);
                 if (max == 0) continue; //Check if the ship has any mastery level
 
                 for (int lv = 1; lv <= max; lv++) {
@@ -105,10 +93,10 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
                     String activeOpt = ShipMastery.getPlayerActiveMasteriesCopy(shipSpec).get(lv);
 
                     if (activeOpt != null && !activeOpt.isEmpty()) {
-                        LOGGER.info("UNGP-SMI: createSaver: " + hullId + " lv " + lv + "'s activated option is " + activeOpt);
+                        //LOGGER.info("UNGP-SMI: createSaver: " + hullId + " lv " + lv + "'s activated option is " + activeOpt);
                         smiSaveData.activatedOptions.put(lv, activeOpt);
                     } else {
-                        LOGGER.info("UNGP-SMI: createSaver: " + hullId + " lv " + lv + " has no activated option.");
+                        //LOGGER.info("UNGP-SMI: createSaver: " + hullId + " lv " + lv + " has no activated option.");
                     }
                 }
 
@@ -133,7 +121,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
     public void loadDataFromSavepointSlot(JSONObject jsonObject) throws JSONException
     {
         //LOGGER.info("UNGP-SMI: BEFORE SAVE: map.size=" + SMI_SAVE_DATA_MAP.size());
-        tempSnapshot.clear();                     // Clear it and make it new
+        this.SMI_SAVE_DATA_MAP.clear();                     // Clear it and make it new
 
         JSONObject rootObj = jsonObject.optJSONObject("SMI_playerMasteryData");
         if (rootObj == null) {                         // No snapshot found
@@ -173,7 +161,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
                             activatedOpt = activatedObj.toString();
                         }
                     }
-                    LOGGER.info("UNGP-SMI: load:" + hullId + " lv " + lv + "'s activated option is " + activatedOpt);
+                    //LOGGER.info("UNGP-SMI: load:" + hullId + " lv " + lv + "'s activated option is " + activatedOpt);
                     if(activatedOpt != null && !activatedOpt.isEmpty()) {
                         smiData.activatedOptions.put(lv, activatedOpt);
                     }
@@ -204,10 +192,10 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
             /* ---------- 3. assemble back to SMISaveData ---------- */
             smiData.pointAndLevelData = pointLevelData;
             smiData.masteryEffectData = effectMap;
-            tempSnapshot.put(hullId, smiData);
+            this.SMI_SAVE_DATA_MAP.put(hullId, smiData);
         }
 
-        LOGGER.info("UNGP-SMI: load snapshot completed. ships=" + tempSnapshot.size());
+        LOGGER.info("UNGP-SMI: load snapshot completed. ships=" + this.SMI_SAVE_DATA_MAP.size());
     }
 
     @Override
@@ -215,7 +203,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
     {
         JSONObject rootObj = new JSONObject();
 
-        for (Map.Entry<String, SMISaveData> entry : SMI_SAVE_DATA_MAP.entrySet()) {
+        for (Map.Entry<String, SMISaveData> entry : this.SMI_SAVE_DATA_MAP.entrySet()) {
             String hullId = entry.getKey();
             SMISaveData smiSaveData = entry.getValue();
 
@@ -241,7 +229,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
                     levelNode.put(optId, optNode);
                 }
                 String activateOpt = smiSaveData.activatedOptions.get(lv);
-                LOGGER.info("UNGP-SMI: save:" + hullId + " lv " + lv + "'s activated option is " + activateOpt);
+                //LOGGER.info("UNGP-SMI: save:" + hullId + " lv " + lv + "'s activated option is " + activateOpt);
                 levelNode.put("activated", activateOpt == null ? JSONObject.NULL : activateOpt);
 
                 levelRoot.put(String.valueOf(lv), levelNode);
@@ -256,9 +244,8 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
         }
 
         jsonObject.put("SMI_playerMasteryData", rootObj);
-        LOGGER.info("UNGP-SMI: save JSON snapshot completed. ships=" + SMI_SAVE_DATA_MAP.size());
+        LOGGER.info("UNGP-SMI: save JSON snapshot completed. ships=" + this.SMI_SAVE_DATA_MAP.size());
 
-        //SMI_SAVE_DATA_MAP.clear();
     }
 
     @Override
@@ -267,7 +254,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
         inheritCount = 0;
 
         /* No snapshot found */
-        if (!isShipMasteryExist || SMI_SAVE_DATA_MAP == null || SMI_SAVE_DATA_MAP.isEmpty())
+        if (!isShipMasteryExist || this.SMI_SAVE_DATA_MAP == null || this.SMI_SAVE_DATA_MAP.isEmpty())
         {
             return;
         }
@@ -279,7 +266,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
                 getPersistentData().
                 get(ShipMastery.MASTERY_KEY);
 
-        for (Map.Entry<String, SMISaveData> e : SMI_SAVE_DATA_MAP.entrySet())
+        for (Map.Entry<String, SMISaveData> e : this.SMI_SAVE_DATA_MAP.entrySet())
         {
             String  hullId   = e.getKey();
             SMISaveData snap = e.getValue();
@@ -363,7 +350,7 @@ public class UNGPShipMasteryInherit implements UNGP_DataSaverAPI {
         TooltipMakerAPI section = root.beginImageWithText("graphics/icons/reports/fleet24b.png", 24f, 250f, false);
         section.addPara(root_i18n.get("mod_indication"), 3f);
         root.addImageWithText(5f);
-        root.addPara(UNGP_InheritData.BULLETED_PREFIX + root_i18n.get("addSaverInfo_01"), 5f, Misc.getHighlightColor(), String.valueOf(SMI_SAVE_DATA_MAP.size()));
+        root.addPara(UNGP_InheritData.BULLETED_PREFIX + root_i18n.get("addSaverInfo_01"), 5f, Misc.getHighlightColor(), String.valueOf(this.SMI_SAVE_DATA_MAP.size()));
     }
 //    private JSONObject safeLoadJSONObject(JSONObject rootJSON, String keyID)
 //    {

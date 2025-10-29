@@ -12,7 +12,7 @@ public class Settings {
 
     public static void loadSettingsFromJson() throws JSONException, IOException
     {
-        JSONObject json = Global.getSettings().loadJSON("UNGPSMI_settings.json", "ungpshipmasteryinherit");
+        JSONObject json = Global.getSettings().loadJSON("ungpsmi_settings.json", "ungpshipmasteryinherit");
 
         try {
             INHERIT_LEVEL_EFFECTS = json.optBoolean("inheritLevelEffects", true);
